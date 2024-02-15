@@ -42,14 +42,14 @@ namespace YARG.Audio.BASS
 
         private bool _isInitialized = false;
 
-        public event Action SongEnd;
+        public event Action? SongEnd;
 
         private double[] _stemVolumes = new double[AudioHelpers.SupportedStems.Count];
         private ISampleChannel[] _sfxSamples = new ISampleChannel[AudioHelpers.SfxPaths.Count];
 
         private int _opusHandle = 0;
 
-        private IStemMixer _mixer = null;
+        private IStemMixer? _mixer = null;
 
         public void Initialize()
         {
@@ -271,14 +271,10 @@ namespace YARG.Audio.BASS
             IsAudioLoaded = true;
         }
 
-        public void LoadMogg(Stream? stream, List<MoggStemMap> stemMaps, float speed)
+        public void LoadMogg(Stream stream, List<MoggStemMap> stemMaps, float speed)
         {
             EditorDebug.Log("Loading mogg song");
             UnloadSong();
-
-            // Verify data
-            if (stream is null)
-                throw new ArgumentNullException("stream");
 
             var usesYARGEncryption = stream.Read<int>(Endianness.Little) switch
             {
@@ -433,7 +429,7 @@ namespace YARG.Audio.BASS
         private void Play(bool fadeIn)
         {
             // Don't try to play if there's no audio loaded or if it's already playing
-            if (!IsAudioLoaded || IsPlaying)
+            if (!IsAudioLoaded || IsPlaying || _mixer is null)
             {
                 return;
             }
@@ -450,7 +446,7 @@ namespace YARG.Audio.BASS
 
         public void Pause()
         {
-            if (!IsAudioLoaded || !IsPlaying)
+            if (!IsAudioLoaded || !IsPlaying || _mixer is null)
             {
                 return;
             }
@@ -478,7 +474,7 @@ namespace YARG.Audio.BASS
                 return;
             }
 
-            if (IsPlaying)
+            if (IsPlaying && _mixer is not null)
             {
                 IsFadingOut = true;
                 await _mixer.FadeOut(token);

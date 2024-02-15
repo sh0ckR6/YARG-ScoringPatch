@@ -18,25 +18,17 @@ namespace YARG.Audio.BASS
 
         public IReadOnlyDictionary<SongStem, List<IStemChannel>> Channels => _channels;
 
-        public IStemChannel LeadChannel { get; protected set; }
+        public IStemChannel LeadChannel { get; protected set; } = null!;
 
         public event Action SongEnd
         {
             add
             {
-                if (LeadChannel is null)
-                {
-                    throw new InvalidOperationException("No song is currently loaded!");
-                }
-
                 LeadChannel.ChannelEnd += value;
             }
             remove
             {
-                if (LeadChannel is not null)
-                {
-                    LeadChannel.ChannelEnd -= value;
-                }
+                LeadChannel.ChannelEnd -= value;
             }
         }
 
@@ -152,22 +144,11 @@ namespace YARG.Audio.BASS
 
         public double GetPosition(bool bufferCompensation = true)
         {
-            // No channel in this case
-            if (LeadChannel is null)
-            {
-                return -1;
-            }
-
             return LeadChannel.GetPosition(bufferCompensation);
         }
 
         public void SetPosition(double position, bool bufferCompensation = true)
         {
-            if (LeadChannel is null)
-            {
-                return;
-            }
-
             bool playing = IsPlaying;
             if (playing)
             {

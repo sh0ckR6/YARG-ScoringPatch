@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace YARG.Audio.PitchDetection
@@ -14,7 +15,7 @@ namespace YARG.Audio.PitchDetection
     /// </summary>
     class IIRFilter
     {
-        const int kHistMask = 31, kHistSize = 32;
+        const int HISTORY_MASK = 31, HISTORY_SIZE = 32;
 
         int m_order;
         IIRFilterType m_filterType;
@@ -91,6 +92,9 @@ namespace YARG.Audio.PitchDetection
         /// Determines poles and zeros of IIR filter
         /// based on bilinear transform method
         /// </summary>
+        [MemberNotNull(nameof(m_real))]
+        [MemberNotNull(nameof(m_imag))]
+        [MemberNotNull(nameof(m_z))]
         void LocatePolesAndZeros()
         {
             m_real = new double[m_order + 1];
@@ -170,14 +174,25 @@ namespace YARG.Audio.PitchDetection
         /// <summary>
         /// Calculate all the values
         /// </summary>
-        public void Design()
+        [MemberNotNull(nameof(m_aCoeff))]
+        [MemberNotNull(nameof(m_bCoeff))]
+        [MemberNotNull(nameof(m_inHistory))]
+        [MemberNotNull(nameof(m_outHistory))]
+        [MemberNotNull(nameof(m_real))]
+        [MemberNotNull(nameof(m_imag))]
+        [MemberNotNull(nameof(m_z))]
+        void Design()
         {
+// "Member '{0}' must have a non-null value when exiting."
+// Don't really wanna touch this code to make things more nullable-friendly
+#pragma warning disable CS8774
             if (!FilterValid) return;
+#pragma warning restore CS8774
 
             m_aCoeff = new double[m_order + 1];
             m_bCoeff = new double[m_order + 1];
-            m_inHistory = new double[kHistSize];
-            m_outHistory = new double[kHistSize];
+            m_inHistory = new double[HISTORY_SIZE];
+            m_outHistory = new double[HISTORY_SIZE];
 
             var newA = new double[m_order + 1];
             var newB = new double[m_order + 1];
@@ -257,13 +272,13 @@ namespace YARG.Audio.PitchDetection
             {
                 m_inHistory[m_histIdx] = inBuffer[inBufferOffset + sampleIdx] + denormal;
 
-                var sum = m_aCoeff.Select((t, idx) => t * m_inHistory[(m_histIdx - idx) & kHistMask]).Sum();
+                var sum = m_aCoeff.Select((t, idx) => t * m_inHistory[(m_histIdx - idx) & HISTORY_MASK]).Sum();
 
                 for (var idx = 1; idx < m_bCoeff.Length; idx++)
-                    sum -= m_bCoeff[idx] * m_outHistory[(m_histIdx - idx) & kHistMask];
+                    sum -= m_bCoeff[idx] * m_outHistory[(m_histIdx - idx) & HISTORY_MASK];
 
                 m_outHistory[m_histIdx] = sum;
-                m_histIdx = (m_histIdx + 1) & kHistMask;
+                m_histIdx = (m_histIdx + 1) & HISTORY_MASK;
                 outBuffer[outBufferOffset + sampleIdx] = (float) sum;
             }
         }

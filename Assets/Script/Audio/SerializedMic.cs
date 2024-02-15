@@ -2,6 +2,6 @@
 {
     public class SerializedMic
     {
-        public string DisplayName;
+        public string DisplayName = "";
     }
 }

@@ -174,7 +174,11 @@ namespace YARG.Helpers.Extensions
             if (rbmetadata.CrowdIndices != Array.Empty<int>() && !ignoreStems.Contains(SongStem.Crowd))
                 stemMaps.Add(new(SongStem.Crowd, rbmetadata.CrowdIndices, rbmetadata.CrowdStemValues));
 
-            manager.LoadMogg(rbData.GetMoggStream(), stemMaps, speed);
+            var stream = rbData.GetMoggStream();
+            if (stream is null)
+                throw new Exception("Failed to get MOGG stream!");
+
+            manager.LoadMogg(stream, stemMaps, speed);
         }
     }
 }

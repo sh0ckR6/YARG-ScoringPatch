@@ -46,7 +46,7 @@ namespace YARG.Audio.BASS
         public bool IsMixed { get; set; } = false;
 
         private int _channelEndHandle;
-        private event Action _channelEnd;
+        private event Action? _channelEnd;
 
         public event Action ChannelEnd
         {
@@ -104,6 +104,7 @@ namespace YARG.Audio.BASS
         public BassStemChannel(IAudioManager manager, SongStem stem, int sourceStream, bool isSplit)
         {
             _manager = manager;
+            _stream = null!;
             _sourceHandle = sourceStream;
             _sourceIsSplit = isSplit;
 

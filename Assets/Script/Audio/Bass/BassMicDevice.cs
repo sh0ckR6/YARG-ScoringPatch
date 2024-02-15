@@ -34,7 +34,7 @@ namespace YARG.Audio.BASS
         private bool _initialized;
         private bool _disposed;
 
-        private PitchTracker _pitchDetector;
+        private PitchTracker _pitchDetector = null!;
 
         private readonly ReverbParameters _monitoringReverbParameters = new()
         {

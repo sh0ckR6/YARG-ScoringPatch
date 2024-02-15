@@ -4,19 +4,19 @@ namespace YARG.Audio.PitchDetection
 {
     class PitchProcessor
     {
-        const int kCourseOctaveSteps = 96;
-        const int kScanHiSize = 31;
-        const float kScanHiFreqStep = 1.005f;
+        const int COARSE_OCTAVE_STEPS = 96;
+        const int SCAN_HI_SIZE = 31;
+        const float SCAN_HI_FREQ_STEP = 1.005f;
 
         readonly int m_blockLen44; // 4/4 block len
 
         readonly float m_detectLevelThreshold;
 
-        readonly int m_numCourseSteps;
+        readonly int m_numCoarseSteps;
         readonly float[] m_pCourseFreqOffset;
         readonly float[] m_pCourseFreq;
-        readonly float[] m_scanHiOffset = new float[kScanHiSize];
-        readonly float[] m_peakBuf = new float[kScanHiSize];
+        readonly float[] m_scanHiOffset = new float[SCAN_HI_SIZE];
+        readonly float[] m_peakBuf = new float[SCAN_HI_SIZE];
         int m_prevPitchIdx;
         readonly float[] m_detectCurve;
 
@@ -26,27 +26,27 @@ namespace YARG.Audio.PitchDetection
 
             m_blockLen44 = (int) (SampleRate / MinPitch + 0.5);
 
-            m_numCourseSteps =
-                (int) (Math.Log((double) MaxPitch / MinPitch) / Math.Log(2.0) * kCourseOctaveSteps + 0.5) + 3;
+            m_numCoarseSteps =
+                (int) (Math.Log((double) MaxPitch / MinPitch) / Math.Log(2.0) * COARSE_OCTAVE_STEPS + 0.5) + 3;
 
-            m_pCourseFreqOffset = new float[m_numCourseSteps + 10000];
-            m_pCourseFreq = new float[m_numCourseSteps + 10000];
+            m_pCourseFreqOffset = new float[m_numCoarseSteps + 10000];
+            m_pCourseFreq = new float[m_numCoarseSteps + 10000];
 
-            m_detectCurve = new float[m_numCourseSteps];
+            m_detectCurve = new float[m_numCoarseSteps];
 
-            var freqStep = 1 / Math.Pow(2.0, 1.0 / kCourseOctaveSteps);
+            var freqStep = 1 / Math.Pow(2.0, 1.0 / COARSE_OCTAVE_STEPS);
             var curFreq = MaxPitch / freqStep;
 
             // frequency is stored from high to low
-            for (var i = 0; i < m_numCourseSteps; i++)
+            for (var i = 0; i < m_numCoarseSteps; i++)
             {
                 m_pCourseFreq[i] = (float) curFreq;
                 m_pCourseFreqOffset[i] = (float) (SampleRate / curFreq);
                 curFreq *= freqStep;
             }
 
-            for (var i = 0; i < kScanHiSize; i++)
-                m_scanHiOffset[i] = (float) Math.Pow(kScanHiFreqStep, kScanHiSize / 2 - i);
+            for (var i = 0; i < SCAN_HI_SIZE; i++)
+                m_scanHiOffset[i] = (float) Math.Pow(SCAN_HI_FREQ_STEP, SCAN_HI_SIZE / 2 - i);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace YARG.Audio.PitchDetection
             const float peakThresh1 = 200.0f, peakThresh2 = 600.0f;
             var bufferSwitched = false;
 
-            for (var idx = 0; idx < m_numCourseSteps; idx += skipSize)
+            for (var idx = 0; idx < m_numCoarseSteps; idx += skipSize)
             {
                 var blockLen = Math.Min(m_blockLen44, (int) m_pCourseFreqOffset[idx] * 2);
                 float[] curSamples;
@@ -98,7 +98,7 @@ namespace YARG.Audio.PitchDetection
                 }
 
                 var stepSizeLoRes = blockLen / 10;
-                var stepSizeHiRes = Math.Max(1, Math.Min(5, idx * 5 / m_numCourseSteps));
+                var stepSizeHiRes = Math.Max(1, Math.Min(5, idx * 5 / m_numCoarseSteps));
 
                 var fValue = RatioAbsDiffLinear(curSamples, idx, blockLen, stepSizeLoRes, false);
 
@@ -111,7 +111,7 @@ namespace YARG.Audio.PitchDetection
                 var dir = 4;      // start going forward
                 var curPos = idx; // start at center of the scan range
                 var begSearch = Math.Max(idx - peakScanSizeHalf, 0);
-                var endSearch = Math.Min(idx + peakScanSizeHalf, m_numCourseSteps - 1);
+                var endSearch = Math.Min(idx + peakScanSizeHalf, m_numCoarseSteps - 1);
 
                 while (curPos >= begSearch && curPos < endSearch)
                 {
@@ -129,7 +129,7 @@ namespace YARG.Audio.PitchDetection
 
                         if (dir == 0)
                         {
-                            if (peakVal > peakThresh2 && peakIdx >= 6 && peakIdx <= m_numCourseSteps - 7)
+                            if (peakVal > peakThresh2 && peakIdx >= 6 && peakIdx <= m_numCoarseSteps - 7)
                             {
                                 var fValL = RatioAbsDiffLinear(curSamples, peakIdx - 5, blockLen, stepSizeHiRes, true);
                                 var fValR = RatioAbsDiffLinear(curSamples, peakIdx + 5, blockLen, stepSizeHiRes, true);
@@ -172,13 +172,13 @@ namespace YARG.Audio.PitchDetection
             var peakIdx = -1;
             var prevVal = 0.0f;
             var dir = 4;                   // start going forward
-            var curPos = kScanHiSize >> 1; // start at center of the scan range
+            var curPos = SCAN_HI_SIZE >> 1; // start at center of the scan range
 
             Array.Clear(m_peakBuf, 0, m_peakBuf.Length);
 
             var offset = m_pCourseFreqOffset[lowFreqIdx];
 
-            while (curPos >= 0 && curPos < kScanHiSize)
+            while (curPos >= 0 && curPos < SCAN_HI_SIZE)
             {
                 if (m_peakBuf[curPos] == 0)
                     m_peakBuf[curPos] = SumAbsDiffHermite(samples, offset * m_scanHiOffset[curPos], m_blockLen44, 1);
@@ -202,7 +202,7 @@ namespace YARG.Audio.PitchDetection
 
                         var fIdx = peakIdx + (y3 - y1) / (2.0f * (2.0f * y2 - y1 - y3));
 
-                        return (float) Math.Pow(kScanHiFreqStep, fIdx - kScanHiSize / 2.0) * m_pCourseFreq[lowFreqIdx];
+                        return (float) Math.Pow(SCAN_HI_FREQ_STEP, fIdx - SCAN_HI_SIZE / 2.0) * m_pCourseFreq[lowFreqIdx];
                     }
                 }
 

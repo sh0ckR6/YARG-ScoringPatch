@@ -21,7 +21,7 @@ namespace Editor
     {
         private const string OUTPUT_FOLDER = "Assets/Plugins/YARG.Core";
         private const string HASH_PATH = OUTPUT_FOLDER + "/YARG.Core.hash";
-        private const string REBUILD_LOCK_PATH = OUTPUT_FOLDER + "/__reload_lock";
+        private const string REBUILD_LOCK_PATH = OUTPUT_FOLDER + "/__reload_lock~";
 
         // NugetForUnity doesn't expose their list of Unity pre-installed references,
         // and I'd rather not re-implement it ourselves lol

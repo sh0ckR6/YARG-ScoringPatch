@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using UnityEditor;
 using UnityEngine;
 
@@ -68,46 +69,30 @@ namespace Editor
             return contents;
         }
 
-        // Adds YARG.Core to each of the Unity project files
-        // Not really necessary and takes a long time, presumably since the project files are large
-        // private static string OnGeneratedCSProject(string path, string contents)
-        // {
-        //     // Check for submodule
-        //     string projectRoot = ProjectRoot;
-        //     string submodule = Path.Combine(projectRoot, "YARG.Core");
-        //     if (!Directory.Exists(submodule))
-        //     {
-        //         Debug.LogWarning($"Submodule {"YARG.Core"} does not exist!");
-        //         return contents;
-        //     }
+        // Enables nullable analysis on each project
+        private static string OnGeneratedCSProject(string path, string contents)
+        {
+            // Check for submodule
+            string projectRoot = YARGCoreBuilder.ProjectRoot;
+            string submodule = Path.Combine(projectRoot, "YARG.Core");
+            if (!Directory.Exists(submodule))
+            {
+                Debug.LogError("YARG.Core submodule does not exist!");
+                return contents;
+            }
 
-        //     // Write to temporary file
-        //     string directory = Path.GetDirectoryName(path);
-        //     string tempFile = Path.Combine(directory, "temp.csproj");
-        //     File.WriteAllText(tempFile, contents);
+            // Load project file contents
+            var projectFile = new XmlDocument();
+            projectFile.LoadXml(contents);
 
-        //     // Add YARG.Core reference
-        //     try
-        //     {
-        //         EditorUtility.DisplayProgressBar("Adding YARG.Core Reference to Project",
-        //             $"Adding YARG.Core to {Path.GetFileName(path)}", 0f);
-        //         string projectFile = Path.Join(submodule, "YARG.Core", $"YARG.Core.csproj");
-        //         RunCommand("dotnet", @$"add ""{tempFile}"" reference ""{projectFile}""").Dispose();
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Debug.LogError($"Failed to add YARG.Core project to project {path}");
-        //         Debug.LogException(ex);
-        //     }
-        //     finally
-        //     {
-        //         EditorUtility.ClearProgressBar();
-        //     }
+            // Add <Nullable>enable</Nullable> property
+            var nullableEnable = projectFile.CreateElement("Nullable");
+            nullableEnable.InnerText = "enable";
+            projectFile.FirstChild["PropertyGroup"].AppendChild(nullableEnable);
 
-        //     // Read back temp file as new contents
-        //     contents = File.ReadAllText(tempFile);
-        //     File.Delete(tempFile);
-        //     return contents;
-        // }
+            var saved = new StringWriter();
+            projectFile.Save(saved);
+            return saved.ToString();
+        }
     }
 }

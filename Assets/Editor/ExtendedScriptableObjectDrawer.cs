@@ -53,7 +53,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
         return totalHeight;
     }
 
-    const int buttonWidth = 66;
+    const int BUTTON_WIDTH = 66;
 
     static readonly List<string> ignoreClassFullNames = new List<string>
     {
@@ -72,7 +72,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
             return;
         }
 
-        ScriptableObject propertySO = null;
+        ScriptableObject? propertySO = null;
         if (!property.hasMultipleDifferentValues && property.serializedObject.targetObject != null &&
             property.serializedObject.targetObject is ScriptableObject)
         {
@@ -104,13 +104,13 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
 
         if (propertySO != null || property.objectReferenceValue == null)
         {
-            propertyRect.width -= buttonWidth;
+            propertyRect.width -= BUTTON_WIDTH;
         }
 
         EditorGUI.ObjectField(propertyRect, property, type, GUIContent.none);
         if (GUI.changed) property.serializedObject.ApplyModifiedProperties();
 
-        var buttonRect = new Rect(position.x + position.width - buttonWidth, position.y, buttonWidth,
+        var buttonRect = new Rect(position.x + position.width - BUTTON_WIDTH, position.y, BUTTON_WIDTH,
             EditorGUIUtility.singleLineHeight);
 
         if (property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue != null)
@@ -140,7 +140,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
                         // Don't bother drawing the class file
                         if (prop.name == "m_Script") continue;
                         float height = EditorGUI.GetPropertyHeight(prop, new GUIContent(prop.displayName), true);
-                        EditorGUI.PropertyField(new Rect(position.x, y, position.width - buttonWidth, height), prop,
+                        EditorGUI.PropertyField(new Rect(position.x, y, position.width - BUTTON_WIDTH, height), prop,
                             true);
                         y += height + EditorGUIUtility.standardVerticalSpacing;
                     } while (prop.NextVisible(false));
@@ -171,12 +171,12 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 
-    public static T _GUILayout<T>(string label, T objectReferenceValue, ref bool isExpanded) where T : ScriptableObject
+    public static T? _GUILayout<T>(string label, T? objectReferenceValue, ref bool isExpanded) where T : ScriptableObject
     {
         return _GUILayout<T>(new GUIContent(label), objectReferenceValue, ref isExpanded);
     }
 
-    public static T _GUILayout<T>(GUIContent label, T objectReferenceValue, ref bool isExpanded)
+    public static T? _GUILayout<T>(GUIContent label, T? objectReferenceValue, ref bool isExpanded)
         where T : ScriptableObject
     {
         Rect position = EditorGUILayout.BeginVertical();
@@ -223,7 +223,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
         }
         else
         {
-            if (GUILayout.Button("Create", GUILayout.Width(buttonWidth)))
+            if (GUILayout.Button("Create", GUILayout.Width(BUTTON_WIDTH)))
             {
                 string selectedAssetPath = "Assets";
                 var newAsset = CreateAssetWithSavePrompt(typeof(T), selectedAssetPath);
@@ -265,7 +265,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
         EditorGUI.indentLevel--;
     }
 
-    public static T DrawScriptableObjectField<T>(GUIContent label, T objectReferenceValue, ref bool isExpanded)
+    public static T? DrawScriptableObjectField<T>(GUIContent label, T? objectReferenceValue, ref bool isExpanded)
         where T : ScriptableObject
     {
         Rect position = EditorGUILayout.BeginVertical();
@@ -311,7 +311,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
         }
         else
         {
-            if (GUILayout.Button("Create", GUILayout.Width(buttonWidth)))
+            if (GUILayout.Button("Create", GUILayout.Width(BUTTON_WIDTH)))
             {
                 string selectedAssetPath = "Assets";
                 var newAsset = CreateAssetWithSavePrompt(typeof(T), selectedAssetPath);
@@ -329,7 +329,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
     }
 
     // Creates a new ScriptableObject via the default Save File panel
-    static ScriptableObject CreateAssetWithSavePrompt(Type type, string path)
+    static ScriptableObject? CreateAssetWithSavePrompt(Type type, string path)
     {
         path = EditorUtility.SaveFilePanelInProject("Save ScriptableObject", type.Name + ".asset", "asset",
             "Enter a file name for the ScriptableObject.", path);

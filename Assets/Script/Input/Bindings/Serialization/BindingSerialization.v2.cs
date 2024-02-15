@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using YARG.Core;
 
-#nullable enable
 
 namespace YARG.Input.Serialization
 {

@@ -71,7 +71,6 @@ namespace YARG.Input
             MenuBindings = BindingCollection.CreateMenuBindings();
         }
 
-#nullable enable
         public ProfileBindings(YargProfile profile, SerializedProfileBindings? bindings)
             : this(profile)
         {
@@ -146,7 +145,6 @@ namespace YARG.Input
         {
             return new(profile, serialized);
         }
-#nullable disable
 
         public void ResolveDevices()
         {

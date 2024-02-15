@@ -11,7 +11,6 @@ using UnityEngine.InputSystem;
 using YARG.Audio;
 using YARG.Core;
 
-#nullable enable
 
 namespace YARG.Input.Serialization
 {

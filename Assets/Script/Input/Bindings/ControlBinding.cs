@@ -68,11 +68,9 @@ namespace YARG.Input
             Action = action;
         }
 
-#nullable enable
         public abstract SerializedControlBinding? Serialize();
         public abstract void Deserialize(SerializedControlBinding serialized);
 
-#nullable disable
 
         public abstract bool IsControlCompatible(InputControl control);
         public abstract bool IsControlActuated(ActuationSettings settings, InputControl control);
@@ -209,7 +207,6 @@ namespace YARG.Input
         {
         }
 
-#nullable enable
         public override SerializedControlBinding? Serialize()
         {
             var serialized = new SerializedControlBinding()
@@ -260,7 +257,6 @@ namespace YARG.Input
 
         protected virtual Dictionary<string, string> SerializeParameters() => new();
         protected virtual void DeserializeParameters(Dictionary<string, string> parameters) {}
-#nullable disable
 
         public override bool IsControlCompatible(InputControl control)
         {
@@ -415,7 +411,6 @@ namespace YARG.Input
             return removed;
         }
 
-#nullable enable
         public override void OnDeviceAdded(InputDevice device)
         {
             // Search by index, can't modify a collection while enumerating it
@@ -457,7 +452,6 @@ namespace YARG.Input
                 return true;
             });
         }
-#nullable disable
 
         protected abstract TBinding CreateBinding(ActuationSettings settings, InputControl<TState> binding);
 
@@ -497,7 +491,6 @@ namespace YARG.Input
             StateChanged?.Invoke();
         }
 
-#nullable enable
         protected virtual SerializedInputControl? SerializeControl(TBinding binding)
         {
             return binding.Serialize();

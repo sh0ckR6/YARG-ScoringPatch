@@ -52,7 +52,6 @@ namespace YARG.Input
             Mode = mode;
         }
 
-#nullable enable
         public SerializedBindingCollection? Serialize()
         {
             var serialized = new SerializedBindingCollection();
@@ -129,7 +128,6 @@ namespace YARG.Input
 
             return null;
         }
-#nullable disable
 
         public bool ContainsControl(InputControl control)
         {

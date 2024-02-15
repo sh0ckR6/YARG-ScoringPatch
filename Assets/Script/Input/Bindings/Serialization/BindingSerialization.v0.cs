@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using YARG.Audio;
 using YARG.Core;
 
-#nullable enable
 
 namespace YARG.Input.Serialization
 {

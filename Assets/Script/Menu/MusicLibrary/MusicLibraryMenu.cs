@@ -32,9 +32,7 @@ namespace YARG.Menu.MusicLibrary
 
         public static SongAttribute Sort { get; private set; } = SongAttribute.Name;
 
-#nullable enable
         private static List<SongMetadata>? _recommendedSongs;
-#nullable disable
         private static string _currentSearch = string.Empty;
         private static int _savedIndex;
         private static bool _doRefresh = true;

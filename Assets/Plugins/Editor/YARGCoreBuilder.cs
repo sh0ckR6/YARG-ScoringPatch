@@ -256,8 +256,18 @@ namespace Editor
         {
             // Fire up `dotnet` to publish the project
             string command = debug ? "build" : "publish";
+            string switches = string.Join(' ',
+                // No name/copyright info for more concise output
+                "/nologo",
+                // Make PolySharp polyfills public so we can use them in the Unity project as well
+                "/p:PolySharpUsePublicAccessibilityForGeneratedTypes=true",
+                // Generate full paths in the output
+                "/p:GenerateFullPaths=true",
+                // Don't output the summary for more concise output
+                "/consoleloggerparameters:NoSummary"
+            );
             var output = RunCommand("dotnet",
-                @$"{command} ""{projectFile}"" /nologo /p:GenerateFullPaths=true /consoleloggerparameters:NoSummary",
+                @$"{command} ""{projectFile}"" {switches}",
                 "Building YARG.Core", "Building project", progress);
 
             string outputPath = "";

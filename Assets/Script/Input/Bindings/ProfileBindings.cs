@@ -15,8 +15,8 @@ namespace YARG.Input
     {
         public YargProfile Profile { get; }
 
-        private SerializedMic _unresolvedMic;
-        public IMicDevice Microphone { get; private set; }
+        private SerializedMic? _unresolvedMic;
+        public IMicDevice? Microphone { get; private set; }
 
         private readonly List<SerializedInputDevice> _unresolvedDevices = new();
         private readonly List<InputDevice> _devices = new();
@@ -28,8 +28,8 @@ namespace YARG.Input
 
         public BindingCollection this[GameMode mode] => _bindsByGameMode[mode];
 
-        public event Action<InputDevice> DeviceAdded;
-        public event Action<InputDevice> DeviceRemoved;
+        public event Action<InputDevice>? DeviceAdded;
+        public event Action<InputDevice>? DeviceRemoved;
 
         public event Action BindingsChanged
         {

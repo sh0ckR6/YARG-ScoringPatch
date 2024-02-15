@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using YARG.Audio;
 using YARG.Core;
 
-
 namespace YARG.Input.Serialization
 {
     // Version 0: Initial version of the bindings format.

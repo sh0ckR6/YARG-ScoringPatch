@@ -11,7 +11,6 @@ using UnityEngine.InputSystem;
 using YARG.Audio;
 using YARG.Core;
 
-
 namespace YARG.Input.Serialization
 {
     // These classes are what the bindings will use for serialization/deserialization.

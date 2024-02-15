@@ -20,7 +20,7 @@ namespace YARG.Input
         {
         }
 
-        public override SerializedInputControl Serialize()
+        public override SerializedInputControl? Serialize()
         {
             return base.Serialize();
         }

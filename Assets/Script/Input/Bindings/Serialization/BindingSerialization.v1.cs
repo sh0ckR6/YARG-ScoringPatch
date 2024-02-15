@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using YARG.Core;
 
-
 namespace YARG.Input.Serialization
 {
     // Version 1: Start of versioning. Adds version number and restructures format for clarity.

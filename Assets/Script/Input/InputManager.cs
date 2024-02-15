@@ -22,10 +22,10 @@ namespace YARG.Input
             Enumerate.IncludeNoisyControls |         // Constantly-changing controls like accelerometers
             Enumerate.IncludeSyntheticControls;      // Non-physical controls like stick up/down/left/right
 
-        public static event Action<InputDevice> DeviceAdded;
-        public static event Action<InputDevice> DeviceRemoved;
+        public static event Action<InputDevice>? DeviceAdded;
+        public static event Action<InputDevice>? DeviceRemoved;
 
-        public static event MenuInputEvent MenuInput;
+        public static event MenuInputEvent? MenuInput;
 
         private static double _beforeUpdateTime;
         private static double _afterUpdateTime;
@@ -61,7 +61,7 @@ namespace YARG.Input
         private static bool _focusChanged;
         private static List<InputDevice> _backgroundDisabledDevices = new();
 
-        private static IDisposable _onEventListener;
+        private static IDisposable? _onEventListener;
 
         public static void Initialize()
         {

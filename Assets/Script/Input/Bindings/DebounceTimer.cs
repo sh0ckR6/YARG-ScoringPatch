@@ -3,6 +3,7 @@ using System;
 namespace YARG.Input
 {
     public class DebounceTimer<T>
+        where T : struct
     {
         public const long DEBOUNCE_TIME_MAX = 25;
 

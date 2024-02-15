@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,18 +27,18 @@ namespace YARG.Input
     /// </summary>
     public abstract class ControlBinding
     {
-        public static event Action<ControlBinding, InputControl> BindingAdded;
-        public static event Action<ControlBinding, InputControl> BindingRemoved;
+        public static event Action<ControlBinding, InputControl>? BindingAdded;
+        public static event Action<ControlBinding, InputControl>? BindingRemoved;
 
         /// <summary>
         /// Fired when a binding has been added or removed.
         /// </summary>
-        public event Action BindingsChanged;
+        public event Action? BindingsChanged;
 
         /// <summary>
         /// Fired when an input event has been processed by this binding.
         /// </summary>
-        public event GameInputProcessed InputProcessed;
+        public event GameInputProcessed? InputProcessed;
 
         /// <summary>
         /// The name for this binding.
@@ -155,7 +156,7 @@ namespace YARG.Input
         public InputControl<TState> Control { get; }
         public TState State { get; protected set; }
 
-        public event Action<TState> StateChanged;
+        public event Action<TState>? StateChanged;
 
         public SingleBinding(InputControl<TState> control)
         {
@@ -178,7 +179,7 @@ namespace YARG.Input
             StateChanged?.Invoke(state);
         }
 
-        public virtual SerializedInputControl Serialize()
+        public virtual SerializedInputControl? Serialize()
         {
             // InputControl.path uses the device name,
             // which is not guaranteed to be stable across different runs of the game
@@ -196,7 +197,7 @@ namespace YARG.Input
         where TState : struct
         where TBinding : SingleBinding<TState>
     {
-        public event Action StateChanged;
+        public event Action? StateChanged;
 
         private List<SerializedInputControl> _unresolvedBindings = new();
 
@@ -263,7 +264,7 @@ namespace YARG.Input
             return IsControlCompatible(control, out _);
         }
 
-        public virtual bool IsControlCompatible(InputControl control, out InputControl<TState> typedControl)
+        public virtual bool IsControlCompatible(InputControl control, [NotNullWhen(true)] out InputControl<TState>? typedControl)
         {
             if (control is InputControl<TState> tControl)
             {
@@ -331,7 +332,7 @@ namespace YARG.Input
             return _bindings.Contains(binding);
         }
 
-        public bool TryGetBinding(InputControl<TState> control, out TBinding foundBinding)
+        public bool TryGetBinding(InputControl<TState> control, [NotNullWhen(true)] out TBinding? foundBinding)
         {
             foreach (var binding in _bindings)
             {

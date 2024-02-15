@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using YARG.Core;
 
-
 namespace YARG.Input.Serialization
 {
     // Version 2: Adds parameters to control bindings.

@@ -137,7 +137,7 @@ namespace YARG.Input
             UpperDeadzone = upper;
         }
 
-        public override SerializedInputControl Serialize()
+        public override SerializedInputControl? Serialize()
         {
             var serialized = base.Serialize();
             if (serialized is null)

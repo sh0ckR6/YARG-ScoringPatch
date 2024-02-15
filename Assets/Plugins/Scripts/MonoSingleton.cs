@@ -13,7 +13,7 @@ namespace UnityEngine
         /// <summary>
         /// The singleton instance for <typeparamref name="TBehaviour"/>.
         /// </summary>
-        public static TBehaviour Instance { get; private set; } = null;
+        public static TBehaviour Instance { get; private set; } = null!;
 
         private void Awake()
         {
@@ -37,7 +37,7 @@ namespace UnityEngine
                 return;
 
             // Destroy and remove the instance
-            Instance = null;
+            Instance = null!;
             SingletonDestroy();
         }
 

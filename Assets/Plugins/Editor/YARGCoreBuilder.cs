@@ -32,7 +32,7 @@ namespace Editor
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { }, null)
             .CreateDelegate(typeof(UnityPreImportedLibraryResolver_GetAlreadyImportedLibs));
 
-        public static string ProjectRoot => Directory.GetParent(Application.dataPath)?.ToString();
+        public static string ProjectRoot => Directory.GetParent(Application.dataPath).ToString();
 
         // For automatically building in the Editor upon any recompilations
         static YARGCoreBuilder()

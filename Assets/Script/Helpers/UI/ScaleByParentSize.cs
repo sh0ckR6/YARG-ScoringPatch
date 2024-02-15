@@ -9,7 +9,7 @@ namespace YARG.Helpers.UI
     [DisallowMultipleComponent]
     public class ScaleByParentSize : MonoBehaviour
     {
-        private RectTransform _parentRectTransform;
+        private RectTransform _parentRectTransform = null!;
         private RectTransform ParentRectTransform
         {
             get

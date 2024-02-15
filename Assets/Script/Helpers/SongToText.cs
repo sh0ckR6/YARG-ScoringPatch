@@ -39,7 +39,7 @@ namespace YARG.Helpers
         private class Token
         {
             public TokenType TokenType;
-            public string Value;
+            public string Value = "";
         }
 
         // These are temporary until advanced settings
@@ -234,7 +234,7 @@ namespace YARG.Helpers
                     var token = copyList[j];
 
                     // Get the previous token
-                    Token previous = null;
+                    Token? previous = null;
                     if (j > 0)
                     {
                         previous = copyList[j - 1];
@@ -272,7 +272,7 @@ namespace YARG.Helpers
         private static List<Token> Tokenize(string line)
         {
             var tokenList = new List<Token>();
-            Token currentToken = null;
+            Token? currentToken = null;
 
             void EndToken()
             {

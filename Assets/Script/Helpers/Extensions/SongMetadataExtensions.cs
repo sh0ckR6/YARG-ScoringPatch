@@ -19,15 +19,17 @@ namespace YARG.Helpers.Extensions
         public static async UniTask SetRawImageToAlbumCover(this SongMetadata songMetadata,
             RawImage rawImage, CancellationToken cancellationToken)
         {
-            if (songMetadata.IniData != null)
-                rawImage.texture = await LoadSongIniCover(songMetadata.IniData, rawImage, cancellationToken);
-            else
-                rawImage.texture = await LoadRBConCover(songMetadata.RBData!, rawImage, cancellationToken);
+            var texture = songMetadata.IniData != null
+                ? await LoadSongIniCover(songMetadata.IniData, rawImage, cancellationToken)
+                : await LoadRBConCover(songMetadata.RBData!, rawImage, cancellationToken);
+
+            if (texture != null)
+                rawImage.texture = texture;
 
             rawImage.color = rawImage.texture != null ? Color.white : Color.clear;
         }
 
-        private static async UniTask<Texture2D> LoadSongIniCover(SongMetadata.IIniMetadata iniData,
+        private static async UniTask<Texture2D?> LoadSongIniCover(SongMetadata.IIniMetadata iniData,
             RawImage rawImage, CancellationToken cancellationToken)
         {
             var file = await UniTask.RunOnThreadPool(iniData.GetUnprocessedAlbumArt);
@@ -43,7 +45,7 @@ namespace YARG.Helpers.Extensions
             return texture;
         }
 
-        private static async UniTask<Texture2D> LoadRBConCover(SongMetadata.IRBCONMetadata RBData,
+        private static async UniTask<Texture2D?> LoadRBConCover(SongMetadata.IRBCONMetadata RBData,
             RawImage rawImage, CancellationToken token)
         {
             var file = await UniTask.RunOnThreadPool(RBData.LoadImgFile);
@@ -88,7 +90,7 @@ namespace YARG.Helpers.Extensions
             }
             else
             {
-                LoadRBCONAudio(song.RBData, manager, speed, ignoreStems);
+                LoadRBCONAudio(song.RBData!, manager, speed, ignoreStems);
             }
         }
 
@@ -105,7 +107,7 @@ namespace YARG.Helpers.Extensions
                 await UniTask.RunOnThreadPool(() => LoadIniAudio(song.IniData, manager, speed, SongStem.Crowd));
             }
             else
-                await UniTask.RunOnThreadPool(() => LoadRBCONAudio(song.RBData, manager, speed, SongStem.Crowd));
+                await UniTask.RunOnThreadPool(() => LoadRBCONAudio(song.RBData!, manager, speed, SongStem.Crowd));
             return false;
         }
 

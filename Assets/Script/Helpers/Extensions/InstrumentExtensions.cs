@@ -5,7 +5,7 @@ namespace YARG.Helpers.Extensions
 {
     public static class InstrumentExtensions
     {
-        public static string ToResourceName(this Instrument instrument)
+        public static string? ToResourceName(this Instrument instrument)
         {
             return instrument switch
             {

@@ -4,7 +4,7 @@ namespace YARG.Helpers.Extensions
 {
     public static class GameModeExtensions
     {
-        public static string ToResourceName(this GameMode instrument)
+        public static string? ToResourceName(this GameMode instrument)
         {
             return instrument switch
             {

@@ -8,7 +8,7 @@ namespace YARG.Helpers
 {
     public static class TextureHelper
     {
-        public static async UniTask<Texture2D> Load(string path, CancellationToken cancellationToken = default)
+        public static async UniTask<Texture2D?> Load(string path, CancellationToken cancellationToken = default)
         {
             using var uwr = CreateRequest(path);
             uwr.downloadHandler = new DownloadHandlerTexture();
@@ -24,9 +24,12 @@ namespace YARG.Helpers
             }
         }
 
-        public static async UniTask<Texture2D> LoadWithMips(string path, CancellationToken cancellationToken = default)
+        public static async UniTask<Texture2D?> LoadWithMips(string path, CancellationToken cancellationToken = default)
         {
             var original = await Load(path, cancellationToken);
+            if (original == null)
+                return null;
+
             var mipmapped = new Texture2D(original.width, original.height, original.format, true);
 
             mipmapped.SetPixelData(original.GetRawTextureData<byte>(), 0);

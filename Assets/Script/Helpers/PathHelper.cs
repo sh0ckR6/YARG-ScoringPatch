@@ -10,47 +10,47 @@ namespace YARG.Helpers
         /// <summary>
         /// Where settings, scores, etc. should be stored.
         /// </summary>
-        public static string PersistentDataPath { get; private set; }
+        public static string PersistentDataPath { get; private set; } = null!;
 
         /// <summary>
         /// The root level of the persistent data path.
         /// </summary>
-        public static string RealPersistentDataPath { get; private set; }
+        public static string RealPersistentDataPath { get; private set; } = null!;
 
         /// <summary>
         /// The data folder in YARG's installation.
         /// </summary>
-        public static string ApplicationDataPath { get; private set; }
+        public static string ApplicationDataPath { get; private set; } = null!;
 
         /// <summary>
         /// The folder where YARG's executable lies.
         /// </summary>
-        public static string ExecutablePath { get; private set; }
+        public static string ExecutablePath { get; private set; } = null!;
 
         /// <summary>
         /// YARG's streaming assets folder.
         /// </summary>
-        public static string StreamingAssetsPath { get; private set; }
+        public static string StreamingAssetsPath { get; private set; } = null!;
 
         /// <summary>
         /// The location of the song cache.
         /// </summary>
-        public static string SongCachePath { get; private set; }
+        public static string SongCachePath { get; private set; } = null!;
 
         /// <summary>
         /// The file to write the bad songs list to.
         /// </summary>
-        public static string BadSongsPath { get; private set; }
+        public static string BadSongsPath { get; private set; } = null!;
 
         /// <summary>
         /// YARC Launcher path.
         /// </summary>
-        public static string LauncherPath { get; private set; }
+        public static string LauncherPath { get; private set; } = null!;
 
         /// <summary>
         /// YARC Launcher setlist path.
         /// </summary>
-        public static string SetlistPath { get; private set; }
+        public static string? SetlistPath { get; private set; }
 
         /// <summary>
         /// Safe options to use when enumerating files or directories.
@@ -85,7 +85,7 @@ namespace YARG.Helpers
 
             // Get other paths that are only allowed on the main thread
             ApplicationDataPath = SanitizePath(Application.dataPath);
-            ExecutablePath = Directory.GetParent(ApplicationDataPath)?.FullName;
+            ExecutablePath = Directory.GetParent(ApplicationDataPath).FullName;
             StreamingAssetsPath = SanitizePath(Application.streamingAssetsPath);
 
             // Get song scanning paths
@@ -106,7 +106,7 @@ namespace YARG.Helpers
             SetlistPath = FindSetlistPath();
         }
 
-        private static string FindSetlistPath()
+        private static string? FindSetlistPath()
         {
             // Use the launcher settings to find the setlist path
             string settingsPath = Path.Join(LauncherPath, "settings.json");

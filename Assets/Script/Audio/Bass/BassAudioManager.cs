@@ -271,7 +271,7 @@ namespace YARG.Audio.BASS
             IsAudioLoaded = true;
         }
 
-        public void LoadMogg(Stream stream, List<MoggStemMap> stemMaps, float speed)
+        public void LoadMogg(Stream? stream, List<MoggStemMap> stemMaps, float speed)
         {
             EditorDebug.Log("Loading mogg song");
             UnloadSong();

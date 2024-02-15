@@ -5,7 +5,7 @@ namespace YARG.Helpers
 {
     public class CameraPreviewTexture : MonoBehaviour
     {
-        public static RenderTexture PreviewTexture { get; private set; }
+        public static RenderTexture? PreviewTexture { get; private set; }
 
         private static readonly List<CameraPreviewTexture> _previews = new();
 

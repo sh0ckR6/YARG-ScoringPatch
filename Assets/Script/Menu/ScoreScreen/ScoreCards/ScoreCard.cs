@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using YARG.Core;
 using YARG.Core.Engine;
 using YARG.Core.Extensions;
 using YARG.Core.Game;
+using YARG.Core.Scoring;
 using YARG.Helpers.Extensions;
 using YARG.Localization;
 using YARG.Player;
@@ -116,7 +118,12 @@ namespace YARG.Menu.ScoreScreen
                 HideTag();
             }
 
-            _score.text = Stats.TotalScore.ToString("N0");
+            _score.text = Player.Profile.ScoringMode switch
+            {
+                ScoringMode.Default => Stats.TotalScore.ToString("N0"),
+                ScoringMode.Pro     => Stats.ProScore.ToString("N0"),
+                _                   => throw new ArgumentOutOfRangeException()
+            };
             _starView.SetStars((int) Stats.Stars);
 
             _notesHit.text = $"{WrapWithColor(Stats.NotesHit)} / {totalNotes}";

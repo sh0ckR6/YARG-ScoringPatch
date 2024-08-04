@@ -25,6 +25,10 @@
             "Menu": "Menu",
             "Vocals": "Vocals"
         },
+        "ScoringMode": {
+            "Default": "Default",
+            "Pro": "Pro"
+        },
         "Instrument": {
             "FiveFretGuitar": "Guitar",
             "FiveFretBass": "Bass",
@@ -324,6 +328,7 @@
         "Default": {
             "Details": "Hello there ladies and gentlemen!",
             "LargeText": {
+                "Unity":  "Yet Another Rhythm Game (Unity Editor)",
                 "Dev": "Yet Another Rhythm Game (Dev Build)",
                 "Nightly": "Yet Another Rhythm Game (Nightly)",
                 "Stable": "Yet Another Rhythm Game"

@@ -7,6 +7,7 @@ using Cysharp.Text;
 using YARG.Core;
 using YARG.Core.Game;
 using YARG.Core.Logging;
+using YARG.Core.Scoring;
 using YARG.Song;
 
 namespace YARG.Localization
@@ -87,6 +88,11 @@ namespace YARG.Localization
         public static string ToLocalizedName(this GameMode gameMode)
         {
             return Key("Enum.GameMode", gameMode);
+        }
+
+        public static string ToLocalizedName(this ScoringMode scoringMode)
+        {
+            return Key("Enum.ScoringMode", scoringMode);
         }
 
         public static string ToLocalizedName(this Instrument instrument)

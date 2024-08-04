@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YARG.Core;
 using YARG.Core.Game;
+using YARG.Core.Scoring;
 using YARG.Localization;
 using YARG.Menu.Data;
 using YARG.Menu.Persistent;
@@ -30,6 +31,12 @@ namespace YARG.Menu.ProfileList
             GameMode.FourLaneDrums,
             GameMode.FiveLaneDrums,
             GameMode.Vocals
+        };
+
+        private static readonly ScoringMode[] _scoringModes =
+        {
+            ScoringMode.Default,
+            ScoringMode.Pro
         };
 
         [SerializeField]
@@ -57,6 +64,8 @@ namespace YARG.Menu.ProfileList
         [SerializeField]
         private TMP_Dropdown _engineDropdown;
         [SerializeField]
+        private TMP_Dropdown _scoringModeDropdown;
+        [SerializeField]
         private TMP_Dropdown _themeDropdown;
         [SerializeField]
         private TMP_Dropdown _colorProfileDropdown;
@@ -83,6 +92,7 @@ namespace YARG.Menu.ProfileList
         private YargProfile _profile;
 
         private readonly List<GameMode> _gameModesByIndex = new();
+        private readonly List<ScoringMode> _scoringModesByIndex = new();
 
         private List<Guid> _enginePresetsByIndex;
         private List<Guid> _colorProfilesByIndex;
@@ -99,6 +109,16 @@ namespace YARG.Menu.ProfileList
 
                 // Create the dropdown option
                 _gameModeDropdown.options.Add(new(gameMode.ToLocalizedName()));
+            }
+
+            // Setup scoring mode dropdown items
+            _scoringModeDropdown.options.Clear();
+            foreach (var scoringMode in _scoringModes)
+            {
+                _scoringModesByIndex.Add(scoringMode);
+
+                // Create dropdown option
+                _scoringModeDropdown.options.Add(new (scoringMode.ToLocalizedName()));
             }
         }
 
@@ -137,6 +157,7 @@ namespace YARG.Menu.ProfileList
             // Display the profile's options
             _profileName.text = _profile.Name;
             _gameModeDropdown.value = _gameModesByIndex.IndexOf(profile.GameMode);
+            _scoringModeDropdown.value = _scoringModesByIndex.IndexOf(profile.ScoringMode);
             _noteSpeedField.text = profile.NoteSpeed.ToString(NUMBER_FORMAT, CultureInfo.CurrentCulture);
             _highwayLengthField.text = profile.HighwayLength.ToString(NUMBER_FORMAT, CultureInfo.CurrentCulture);
             _inputCalibrationField.text = _profile.InputCalibrationMilliseconds.ToString();
@@ -218,6 +239,11 @@ namespace YARG.Menu.ProfileList
         public void ChangeGameMode()
         {
             _profile.GameMode = _gameModesByIndex[_gameModeDropdown.value];
+        }
+
+        public void ChangeScoringMode()
+        {
+            _profile.ScoringMode = _scoringModesByIndex[_scoringModeDropdown.value];
         }
 
         public void ChangeNoteSpeed()

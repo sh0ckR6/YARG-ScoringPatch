@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PlasticBand.Haptics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,7 @@ using YARG.Core.Chart;
 using YARG.Core.Engine;
 using YARG.Core.Input;
 using YARG.Core.Logging;
+using YARG.Core.Scoring;
 using YARG.Gameplay.HUD;
 using YARG.Input;
 using YARG.Player;
@@ -62,7 +64,13 @@ namespace YARG.Gameplay.Player
 
         public float Stars => BaseStats.Stars;
 
-        public int Score => BaseStats.TotalScore;
+        public int Score =>
+            Player.Profile.ScoringMode switch
+            {
+                ScoringMode.Default => BaseStats.TotalScore,
+                ScoringMode.Pro     => BaseStats.ProScore,
+                _                   => throw new ArgumentOutOfRangeException()
+            };
         public int Combo => BaseStats.Combo;
         public int NotesHit => BaseStats.NotesHit;
 

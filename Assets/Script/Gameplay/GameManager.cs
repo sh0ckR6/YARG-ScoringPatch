@@ -21,6 +21,7 @@ using YARG.Gameplay.HUD;
 using YARG.Gameplay.Player;
 using YARG.Helpers.Extensions;
 using YARG.Integration;
+using YARG.Localization;
 using YARG.Menu.Navigation;
 using YARG.Menu.Persistent;
 using YARG.Menu.ScoreScreen;
